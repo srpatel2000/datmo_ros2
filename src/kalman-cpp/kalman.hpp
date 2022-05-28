@@ -8,7 +8,15 @@
 * @date: 2014.11.15
 */
 
-#include <Eigen/Dense>
+// #include <Eigen/Dense>
+
+/*Change: compile program using Eigen 3 rather than Eigen since that's
+  what's in our cmakelist file. If this doesn't work I'm pretty sure we can 
+  uncomment the above line and it should still work fine. 
+  
+  Link: https://epcced.github.io/2019-04-16-ModernCpp/lectures/eigen/using-eigen.pdf
+  */
+#include <eigen3/Eigen/Dense>
 
 #pragma once
 
@@ -56,7 +64,6 @@ public:
   * time step is assumed to remain constant.
   */
   void update(const Eigen::VectorXd& y);
-
 
   void update(const Eigen::VectorXd& y, double dt);
 

@@ -29,31 +29,52 @@
 
 /* Author: Konstantinos Konstantinidis */
 
-#include <ros/ros.h>
-#include <math.h>       /* atan */
+/* Change: Switch h files to hpp */
+
+// #include <ros/ros.h>
+#include "rclcpp/rclcpp.hpp"
+
+// #include <math.h>       /* atan */
+#include <cmath>
+
+// leave (https://curc.readthedocs.io/en/latest/programming/OpenMP-C.html)
 #include <omp.h>      //Multi-threading
+
+// leave (https://www.geeksforgeeks.org/vector-in-cpp-stl/)
 #include <vector>
+
+// leave (https://www.cplusplus.com/reference/random/)
 #include <random>
 #include <algorithm> // for sort(), min()
 #include <chrono>
+
+// leave (https://www.cplusplus.com/reference/fstream/)
 #include <iostream>
 #include <fstream>
 
-#include <sensor_msgs/LaserScan.h>
-#include <visualization_msgs/Marker.h>
-#include <visualization_msgs/MarkerArray.h>
-#include <geometry_msgs/Point.h>
-#include <tf/tf.h>
+/* CHANGE: inserting the subfolder msg between the package name and message datatype
+   changing the included filename from CamelCase to underscore separation
+   changing from *.h to *.hpp */ 
+#include <sensor_msgs/msg/laser_scan.hpp>
+#include <visualization_msgs/msg/marker.hpp>
+#include <visualization_msgs/msg/marker_array.hpp>
+#include <geometry_msgs/msg/point.hpp>
+
+/* CHANGE: https://docs.ros.org/en/foxy/Tutorials/Tf2/Writing-A-Tf2-Listener-Cpp.html */
+// #include <tf/tf.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2/transform_broadcaster.h>
+
+// Don't change --> code written by original team
 #include <datmo/TrackArray.h>
 #include <datmo/Track.h>
-
 #include "cluster.hpp"
 
-typedef std::pair<double, double> Point;
-typedef std::vector<double> l_shape;
-typedef std::vector<l_shape> l_shapes;
-typedef std::vector<Point> pointList;
-
+// CHANGE: replace typedef with change
+change std::pair<double, double> Point;
+change std::vector<double> l_shape;
+change std::vector<l_shape> l_shapes;
+change std::vector<Point> pointList;
 
 using namespace std;
 // This node segments the point cloud based on the break-point detector algorithm.
@@ -70,17 +91,27 @@ public:
   void visualiseGroupedPoints(const vector<pointList> &);
   void transformPointList(const pointList& , pointList& );
 
-  tf::TransformListener tf_listener;
+  // CHANGE: 
+  // tf::TransformListener tf_listener;
+  tf_listener = std::make_shared<tf2_ros::TransformListener>;
 private:
-  ros::Publisher pub_marker_array; 
-  ros::Publisher pub_tracks_box_kf;
-  ros::Subscriber sub_scan;
-  sensor_msgs::LaserScan scan;
+
+  // CHANGE: change C++ library calls
+  // ros::Publisher pub_marker_array; 
+  auto pub_marker_array = node->create_publisher<std_msgs::msg::String>;
+  // ros::Publisher pub_tracks_box_kf;
+  auto pub_tracks_box_kf = node->create_publisher<std_msgs::msg::String>;
+  // ros::Subscriber sub_scan;
+  auto sub_scan = node->create_subscription<std_msgs::msg::String>;
+  // sensor_msgs::LaserScan scan;
+  sensor_msgs::msg::LaserScan scan;
+  
   vector<Cluster> clusters;
 
-  //Tuning Parameteres
+  //Tuning Parameters
   double dt;
-  ros::Time time;
+  //ros::Time time;
+  rclcpp::Time time; 
 
   //initialised as one, because 0 index take the msgs that fail to be initialized
   unsigned long int cg       = 1;//group counter to be used as id of the clusters

@@ -30,14 +30,23 @@
 /* Author: Konstantinos Konstantinidis */
 
 #pragma once
-#include <ros/ros.h>
+
+//// #include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 #include "l_shape_tracker.hpp"
-#include <Eigen/Dense>
-#include <tf/transform_listener.h>
-#include <visualization_msgs/Marker.h>
+//// #include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
+//// #include <tf/transform_listener.h>
+#include <tf2_ros/transform_listener.h>
+//// #include <visualization_msgs/Marker.h>
+#include <visualization_msgs/msg/marker.hpp>
+
+//// need to check below line to see if it works
 #include "datmo/Track.h"
+
 #include <tf2/LinearMath/Quaternion.h>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+//// #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 #include <vector>
 
 using namespace Eigen;
@@ -60,18 +69,38 @@ public:
   unsigned long int age; //age of the cluster 
   float r, g, b, a; //color of the cluster
 
-  visualization_msgs::Marker getBoundingBoxCenterVisualisationMessage();
-  visualization_msgs::Marker getClosestCornerPointVisualisationMessage();
-  visualization_msgs::Marker getClusterVisualisationMessage();
-  visualization_msgs::Marker getLineVisualisationMessage();
-  visualization_msgs::Marker getArrowVisualisationMessage();
-  visualization_msgs::Marker getThetaL2VisualisationMessage();
-  visualization_msgs::Marker getThetaL1VisualisationMessage();
-  visualization_msgs::Marker getThetaBoxVisualisationMessage();
-  visualization_msgs::Marker getBoundingBoxVisualisationMessage();
-  visualization_msgs::Marker getBoxModelKFVisualisationMessage();
-  visualization_msgs::Marker getLShapeVisualisationMessage();
-  visualization_msgs::Marker getBoxSolidVisualisationMessage();
+  //// visualization_msgs::Marker getBoundingBoxCenterVisualisationMessage();
+  //// visualization_msgs::Marker getClosestCornerPointVisualisationMessage();
+  //// visualization_msgs::Marker getClusterVisualisationMessage();
+  //// visualization_msgs::Marker getLineVisualisationMessage();
+  //// visualization_msgs::Marker getArrowVisualisationMessage();
+  //// visualization_msgs::Marker getThetaL2VisualisationMessage();
+  //// visualization_msgs::Marker getThetaL1VisualisationMessage();
+  //// visualization_msgs::Marker getThetaBoxVisualisationMessage();
+  //// visualization_msgs::Marker getBoundingBoxVisualisationMessage();
+  //// visualization_msgs::Marker getBoxModelKFVisualisationMessage();
+  //// visualization_msgs::Marker getLShapeVisualisationMessage();
+  //// visualization_msgs::Marker getBoxSolidVisualisationMessage();
+  
+  visualization_msgs::msg::Marker getBoundingBoxCenterVisualisationMessage();
+  visualization_msgs::msg::Marker getClosestCornerPointVisualisationMessage();
+  visualization_msgs::msg::Marker getClusterVisualisationMessage();
+  visualization_msgs::msg::Marker getLineVisualisationMessage();
+  visualization_msgs::msg::Marker getArrowVisualisationMessage();
+  visualization_msgs::msg::Marker getThetaL2VisualisationMessage();
+  visualization_msgs::msg::Marker getThetaL1VisualisationMessage();
+  visualization_msgs::msg::Marker getThetaBoxVisualisationMessage();
+  visualization_msgs::msg::Marker getBoundingBoxVisualisationMessage();
+  visualization_msgs::msg::Marker getBoxModelKFVisualisationMessage();
+  visualization_msgs::msg::Marker getLShapeVisualisationMessage();
+  visualization_msgs::msg::Marker getBoxSolidVisualisationMessage();
+
+
+
+
+
+
+
 
   void update(const pointList&, const double dt, const tf::Transform& ego_pose);
 
@@ -100,7 +129,9 @@ private:
   Point closest_corner_point;
   
 
-  visualization_msgs::Marker boxcenter_marker_;
+  //// visualization_msgs::Marker boxcenter_marker_;
+  visualization_msgs::msg::Marker boxcenter_marker_;
+  
   void populateTrackingMsgs(const double& dt);
   void calcMean(const pointList& ); //Find the mean value of the cluster
   void rectangleFitting(const pointList& ); //Search-Based Rectangle Fitting 

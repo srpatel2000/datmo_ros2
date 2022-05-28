@@ -5,6 +5,9 @@
 * @date: 2014.11.15
 */
 
+/*I don't think we need to change anything in this file since it isn't
+  using ROS1. I only changed one line in the kalman.hpp file. */
+
 #include <iostream>
 #include <stdexcept>
 

@@ -199,7 +199,7 @@ void LshapeTracker::detectCornerPointSwitchMahalanobis(const double& from, const
   double x_corner_L2 = x_c + L2_box*sin(theta_corner);
   double y_corner_L2 = y_c - L2_box*cos(theta_corner);
   double theta_corner_L2 = normalize_angle(theta_corner + pi/2);
-  ROS_DEBUG_STREAM("simple: "<<theta_corner-theta_new<<", findTurn: "<<findTurn(theta_new,theta_corner));
+  /////change ROS_DEBUG_STREAM("simple: "<<theta_corner-theta_new<<", findTurn: "<<findTurn(theta_new,theta_corner));
 
    Eigen::Matrix<double, 5, 5> C;
    C.setZero();
@@ -406,5 +406,4 @@ void LshapeTracker::CounterClockwisePointSwitch(){
   dynamic_kf.changeStates(new_dynamic_states);
   shape_kf.changeStates(new_shape_states);
 }
-
 
