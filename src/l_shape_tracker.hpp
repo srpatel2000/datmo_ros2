@@ -32,6 +32,7 @@
 #pragma once
 
 #include "kalman-cpp/kalman.hpp"
+#include <vector>
 #include <eigen3/Eigen/Dense> ///change
 /////#include <ros/console.h>  ///problem
 

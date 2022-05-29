@@ -33,6 +33,7 @@
 
 //// #include <ros/ros.h>
 #include <rclcpp/rclcpp.hpp>
+
 #include "l_shape_tracker.hpp"
 //// #include <Eigen/Dense>
 #include <eigen3/Eigen/Dense>
@@ -94,11 +95,6 @@ public:
   visualization_msgs::msg::Marker getBoxModelKFVisualisationMessage();
   visualization_msgs::msg::Marker getLShapeVisualisationMessage();
   visualization_msgs::msg::Marker getBoxSolidVisualisationMessage();
-
-
-
-
-
 
 
 

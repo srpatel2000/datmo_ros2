@@ -1,6 +1,6 @@
  <launch>
 
- <node pkg="datmo" exec="datmo" name="datmo" output="screen">
+ <node pkg="datmo_ros2" exec="datmo_ros2" name="datmo_ros2" output="screen">
   <param name="lidar_frame" value="laser" />
   <param name="world_frame" value="laser" />
   <param name="threshold_distance" value="0.2" />
