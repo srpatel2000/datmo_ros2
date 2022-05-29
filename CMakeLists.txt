@@ -52,10 +52,17 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/Track.msg"
+  "msg/TrackArray.msg"
+)
 
 include_directories(
  ${Eigen3_INCLUDE_DIRS}
 )
+
+
+add_executable(datmo src/main.cpp src/l_shape_tracker.cpp src/kalman-cpp/kalman.cpp src/datmo.cpp src/cluster.cpp)
 
 ament_package()
 
