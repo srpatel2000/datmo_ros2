@@ -1,6 +1,6 @@
-Detection and Tracking of Moving Objects with 2D LIDAR
+Detection and Tracking of Moving Objects with 2D LIDAR (ROS 2)
 ========================================
-This package aims to provide Detection and Tracking of Moving Objects capabilities to robotic platforms that are equipped with a 2D LIDAR sensor and publish 'sensor_msgs/LaseScan' ROS messages.
+This package aims to provide Detection and Tracking of Moving Objects capabilities to robotic platforms that are equipped with a 2D LIDAR sensor and publish 'sensor_msgs/LaseScan' ROS 2 messages.
 Such a scenario would be the one visualized below, in which the black scaled car is equipped with a LIDAR sensor and it needs to track the motion of the red vehicle through the LIDAR measurements.\
 ![Example experiment](https://github.com/kostaskonkk/datmo/raw/master/images/experiment.gif)
 
@@ -73,32 +73,32 @@ Below you can find a video of a presentation of mine, in which I explain some ea
 [![Midterm presentation](https://img.youtube.com/vi/HfFZcYwsY3I/0.jpg)](https://www.youtube.com/watch?v=HfFZcYwsY3I "Midterm presentation")
 
 # Installation and use
-This ROS package can be installed in the following way:
-1. First you should navigate to the source folder of your catkin_ws. For example `cd ~/catkin_ws/src`.
+This ROS 2 package can be installed in the following way:
+1. First you should navigate to the source folder of your ros2_ws. For example `cd ~/ros2_ws/src`.
 2. Run 
 ```sh
-git clone git@github.com:kostaskonkk/datmo.git
+git clone git@github.com:srpatel2000/datmo_ros2.git
 cd ..
-catkin_make
+colcon build
 ```
 The datmo package should be now installed to your computer and you will be able to use it after sourcing your workspace. 
 
 ```
-source devel/setup.bash
+source install/setup.bash
 ```
 
 You can run a demonstration of the DATMO package by running:
 
 ```
-roslaunch datmo example.launch bag:=overtakes
+ros2 launch datmo example.launch bag:=overtakes
 ```
 
 You can run it by typing:
 
 ```
-roslaunch datmo datmo.launch
+ros2 launch datmo datmo.launch
 ```
-# ROS API
+# ROS 2 API
 ## Subscribed Topics
 scan(sensor_msgs/LaserScan) - This topic should be created be your LIDAR sensor.
 
@@ -106,14 +106,12 @@ scan(sensor_msgs/LaserScan) - This topic should be created be your LIDAR sensor.
 
 This node can publish a variety of topics but the final configuration depends on the user. By default the majority of the topics are disabled and they should be enabled through the launch file configuration.
 
-**datmo/marker_array (visualization_msgs/MarkerArray)** - In this topic a variety of Rviz markers are published, which can facilitate in understanding the inner workings of the program.\
+**datmo/marker_array (visualization_msgs/msg/marker_array)** - In this topic a variety of Rviz markers are published, which can facilitate in understanding the inner workings of the program.\
 **datmo/box_kf (datmo/TrackArray)** - In this topic the output of a Kalman Filter with a Constant Velocity model, which tracks the center of the box that surrounds the clusters is published.\
 
 Note: In case that the marker_array topic is published from a robot and visualized in computer, which has a different version of ROS installed (kinetic, melodic, ...), the msgs will not be published and the datmo node will crash with an md5sum error. To mitigate this, you should install on your robot the visualization msgs package of the ROS installation that runs on your computer.
 
 ## Custom Messages
-
-This package uses two custom msgs types `datmo/Track` and `datmo/TrackArray` to facilitate the publishing of its results. To my knowledge, at the time of developement, there was no standard ROS messages that accomplishes the same task. 
 
 The `datmo/Track` message has the following structure:\
 int32 id - object ID, so it is possible to differentiate between different objects during tracking\
