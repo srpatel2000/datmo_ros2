@@ -1,23 +1,35 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(datmo)
-add_compile_options(-std=c++11)
-# list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+cmake_minimum_required(VERSION 3.5)
+project(datmo_ros2)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)# required for YCM
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  std_msgs
-  tf
-  nav_msgs
-  sensor_msgs
-  visualization_msgs
-  cmake_modules REQUIRED
-  message_generation
-)
-find_package(Eigen REQUIRED)
+# Default to C99
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 99)
+endif()
+
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
+
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(visualization_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(eigen3_cmake_module REQUIRED)
+find_package(Eigen3 REQUIRED)
 find_package(OpenMP REQUIRED)
 
 #MultiThreading Library
@@ -29,28 +41,21 @@ IF(USE_OpenMP)
   ENDIF()
 ENDIF()
 
-add_message_files(
-  FILES
-  Track.msg
-  TrackArray.msg
-)
-
-generate_messages(
-  DEPENDENCIES
-  nav_msgs
-  std_msgs
-)
-
-catkin_package(
- CATKIN_DEPENDS roscpp std_msgs message_runtime
-)
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  # the following line skips the linter which checks for copyrights
+  # uncomment the line when a copyright and license is not present in all source files
+  #set(ament_cmake_copyright_FOUND TRUE)
+  # the following line skips cpplint (only works in a git repo)
+  # uncomment the line when this package is not in a git repo
+  #set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
 
 include_directories(
-  ${catkin_INCLUDE_DIRS}
-  ${Eigen_INCLUDE_DIRS}
+ ${Eigen3_INCLUDE_DIRS}
 )
 
-add_executable(datmo src/main.cpp src/l_shape_tracker.cpp src/kalman-cpp/kalman.cpp src/datmo.cpp src/cluster.cpp)
-add_dependencies(datmo ${catkin_EXPORTED_TARGETS} datmo_generate_messages_cpp)
-target_link_libraries(datmo ${catkin_LIBRARIES})
+ament_package()
+

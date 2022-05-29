@@ -1,33 +1,42 @@
 <?xml version="1.0"?>
-<package format="2">
-  <name>datmo</name>
-  <version>0.1.2</version>
-  <description>The LIDAR Detection and Tracking of Moving Objects package</description>
-  
-  <author email="kostaskonkk@gmail.com">Kostas Konstantinidis</author> 
-  <maintainer email="kostaskonkk@gmail.com">Kostas Konstantinidis</maintainer>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>datmo_ros2</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="djnighti@ucsd.edu">root</maintainer>
+  <license>TODO: License declaration</license>
 
-  <license>BSD</license>
-  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
-
-  <url type="repository">https://github.com/kostaskonkk/datmo</url> 
-
-  <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>roscpp</build_depend>
+  <build_depend>rclcpp</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend>tf</build_depend>
+  
+  <build_depend>tf2</build_depend>
+
   <build_depend>nav_msgs</build_depend>
   <build_depend>sensor_msgs</build_depend>
   <build_depend>tf2_geometry_msgs</build_depend>
+  
   <build_depend>eigen</build_depend>
+  <build_depend>eigen3_cmake_module</build_depend>
+  
   <build_depend>visualization_msgs</build_depend>
-  <build_depend>cmake_modules</build_depend>
-  <build_export_depend>roscpp</build_export_depend>
+  
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  
+  <build_export_depend>rclcpp</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
-  <exec_depend>roscpp</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
-  <build_depend>message_generation</build_depend>
-  <exec_depend>message_runtime</exec_depend>
 
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+
+  
+  <build_depend>rosidl_default_generators</build_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>
