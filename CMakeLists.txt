@@ -31,6 +31,7 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(eigen3_cmake_module REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(OpenMP REQUIRED)
+find_package(datmo_msg_interface REQUIRED) 
 
 #MultiThreading Library
 OPTION (USE_OpenMP "Use OpenMP" OFF)
@@ -52,17 +53,18 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/Track.msg"
-  "msg/TrackArray.msg"
-)
+
+add_executable(datmo_ros_2 src/main.cpp src/l_shape_tracker.cpp src/kalman-cpp/kalman.cpp src/datmo.cpp src/cluster.cpp)
+
+# tf2_geometry_msgs not working need to sort out next time
+ament_target_dependencies(datmo_ros_2 rclcpp std_msgs datmo_msg_interface tf2 tf2_geometry_msgs)
 
 include_directories(
  ${Eigen3_INCLUDE_DIRS}
 )
 
 
-add_executable(datmo src/main.cpp src/l_shape_tracker.cpp src/kalman-cpp/kalman.cpp src/datmo.cpp src/cluster.cpp)
+ament_export_dependencies(rosidl_default_runtime)
 
 ament_package()
 
