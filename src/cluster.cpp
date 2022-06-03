@@ -54,7 +54,7 @@ static inline double shortest_angular_distance(double from, double to){
   return normalize_angle(to-from);
 }
 
-Cluster::Cluster(unsigned long int id, const pointList& new_points, const double& dt, const std::string& world_frame, const tf::Transform& ego_pose){
+Cluster::Cluster(unsigned long int id, const pointList& new_points, const double& dt, const std::string& world_frame, const tf2::Transform& ego_pose){
 
   this->id = id;
   this->r = rand() / double(RAND_MAX);
@@ -81,7 +81,7 @@ Cluster::Cluster(unsigned long int id, const pointList& new_points, const double
   populateTrackingMsgs(dt);
 }
 
-void Cluster::update(const pointList& new_points, const double dt, const tf::Transform& ego_pose) {
+void Cluster::update(const pointList& new_points, const double dt, const tf2::Transform& ego_pose) {
 
   ego_coordinates.first = ego_pose.getOrigin().getX();
   ego_coordinates.second= ego_pose.getOrigin().getY();
@@ -437,7 +437,7 @@ double Cluster::closenessCriterion(const VectorXd& C1, const VectorXd& C2, const
 visualization_msgs::msg::Marker Cluster::getThetaBoxVisualisationMessage() {
 
   //// visualization_msgs::Marker arrow_marker;
-  visualization_msgs::msgs::Marker arrow_marker;
+  visualization_msgs::msg::Marker arrow_marker;
 
   //// arrow_marker.type            = visualization_msgs::Marker::ARROW;
   arrow_marker.type            = visualization_msgs::msg::Marker::ARROW;
@@ -510,19 +510,19 @@ visualization_msgs::msg::Marker Cluster::getThetaL1VisualisationMessage() {
   return arrow_marker;
 }
 //// visualization_msgs::Marker Cluster::getThetaL2VisualisationMessage() {
-visualization_msgs::Marker Cluster::msg::getThetaL2VisualisationMessage() {
+visualization_msgs::msg::Marker Cluster::getThetaL2VisualisationMessage() {
   
   //// visualization_msgs::Marker arrow_marker;
   visualization_msgs::msg::Marker arrow_marker;
 
 
-  //// arrow_marker.type              = visualization_msgs::Marker::ARROW;
+  //// arrow_marker.type              = visualization_msgs`:Marker::ARROW;
   arrow_marker.type              = visualization_msgs::msg::Marker::ARROW;
 
   //arrow_marker.header.frame_id = frame_name;
 
   //// arrow_marker.header.stamp      = ros::Time::now();
-  arrow_marker.header.stamp      = rclcpp::Time::now();
+  arrow_marker.header.stamp      = rclcpp::Clock().now();
 
   arrow_marker.ns                = "thetaL2";
 
@@ -559,7 +559,7 @@ visualization_msgs::msg::Marker Cluster::getArrowVisualisationMessage() {
   //arrow_marker.header.frame_id = frame_name;
   arrow_marker.header.frame_id = frame_name;
   //// arrow_marker.header.stamp = ros::Time::now();
-  arrow_marker.header.stamp = rclcpp::Time::now();
+  arrow_marker.header.stamp = rclcpp::Clock().now();
 
   arrow_marker.ns = "velocities";
 
@@ -600,7 +600,7 @@ visualization_msgs::msg::Marker Cluster::getArrowVisualisationMessage() {
   corner_msg.header.frame_id = frame_name;
 
   ////  corner_msg.header.stamp = ros::Time::now();
-  corner_msg.header.stamp = rclcpp::Time::now();
+  corner_msg.header.stamp = rclcpp::Clock().now();
 
   corner_msg.ns = "closest_corner";
 
@@ -640,7 +640,7 @@ visualization_msgs::msg::Marker Cluster::getArrowVisualisationMessage() {
     boxcenter_marker.header.frame_id = frame_name;
 
     //// boxcenter_marker.header.stamp = ros::Time::now();
-    boxcenter_marker.header.stamp = rclcpp::Time::now();
+    boxcenter_marker.header.stamp = rclcpp::Clock().now();
 
     boxcenter_marker.ns = "bounding_box_center";
 
@@ -671,7 +671,7 @@ visualization_msgs::msg::Marker Cluster::getClusterVisualisationMessage() {
 
   cluster_vmsg.header.frame_id  = frame_name;
   //// cluster_vmsg.header.stamp = ros::Time::now();
-  cluster_vmsg.header.stamp = rclcpp::Time::now();
+  cluster_vmsg.header.stamp = rclcpp::Clock().now();
 
   cluster_vmsg.ns = "clusters";
   //// cluster_vmsg.action = visualization_msgs::Marker::ADD;
@@ -713,7 +713,7 @@ visualization_msgs::msg::Marker Cluster::getBoxSolidVisualisationMessage() {
 
   marker.header.frame_id = frame_name;
   //// marker.header.stamp = ros::Time::now();
-  marker.header.stamp = rclcpp::Time::now();
+  marker.header.stamp = rclcpp::Clock().now();
 
   marker.ns = "boxes";
   marker.id = this->id;

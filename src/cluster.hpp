@@ -48,7 +48,7 @@
 
 #include <tf2/LinearMath/Quaternion.h>
 //// #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <vector>
 
 using namespace Eigen;
@@ -59,13 +59,13 @@ typedef std::vector<Point> pointList;
 class Cluster {
 public:
 
-  Cluster(unsigned long int id, const pointList&, const double&, const std::string&, const tf::Transform& ego_pose);
+  Cluster(unsigned long int id, const pointList&, const double&, const std::string&, const tf2::Transform& ego_pose);
 
 
   std::string frame_name;
   Point ego_coordinates;
 
-  datmo::Track msg_track_box_kf;
+  datmo_msg_interface::msg::Track msg_track_box_kf;
 
   unsigned long int id; //identifier for the cluster 
   unsigned long int age; //age of the cluster 
@@ -99,7 +99,7 @@ public:
 
 
 
-  void update(const pointList&, const double dt, const tf::Transform& ego_pose);
+  void update(const pointList&, const double dt, const tf2::Transform& ego_pose);
 
   std::pair<double, double> mean() { return mean_values; }; //Return mean of cluster.
   double meanX() { return mean_values.first; };

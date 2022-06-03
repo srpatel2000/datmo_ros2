@@ -38,21 +38,21 @@ Datmo::Datmo(){
   auto node_private = std::make_shared<rclcpp::Node>("...", ...);
   
   //ROS_INFO("Starting Detection And Tracking of Moving Objects");
-  RCLCPP_INFO("Starting Detection And Tracking of Moving Objects");
+  RCLCPP_INFO(node->get_logger(),"Starting Detection And Tracking of Moving Objects");
 
   // change if below code breaks: https://roboticsbackend.com/rclcpp-params-tutorial-get-set-ros2-params-with-cpp/
   node_private.param("lidar_frame", lidar_frame, string("base_link"));
   node_private.param("world_frame", world_frame, string("map"));
   // ROS_INFO("The lidar_frame is: %s and the world frame is: %s", lidar_frame.c_str(), world_frame.c_str());
-  RCLCPP_INFO("The lidar_frame is: %s and the world frame is: %s", lidar_frame.c_str(), world_frame.c_str()); 
+  RCLCPP_INFO(node->get_logger(), "The lidar_frame is: %s and the world frame is: %s", lidar_frame.c_str(), world_frame.c_str()); 
   node_private.param("threshold_distance", dth, 0.2);
   node_private.param("max_cluster_size", max_cluster_size, 360);
   node_private.param("euclidean_distance", euclidean_distance, 0.25);
   node_private.param("pub_markers", p_marker_pub, false);
 
-  pub_tracks_box_kf     = node.advertise<datmo::TrackArray>("datmo/box_kf", 10);
+  pub_tracks_box_kf     = node.advertise<datmo_msg_interface::msg::TrackArray>("datmo/box_kf", 10);
   pub_marker_array   = node.advertise<visualization_msgs::msg::MarkerArray>("datmo/marker_array", 10);
-  sub_scan = n.subscribe("/scan", 1, &Datmo::callback, this);
+  sub_scan = node.subscribe("/scan", 1, &Datmo::callback, this);
 }
 
 Datmo::~Datmo(){
@@ -67,7 +67,7 @@ void Datmo::callback(const sensor_msgs::msg::LaserScan::ConstPtr& scan_in){
   pub_marker_array.publish(markera);
 
   // Only if there is a transform between the world and lidar frame continue
-  if(tf_listener.canTransform(world_frame, lidar_frame, rclcpp::Time())){
+  if(tf_listener.canTransform(world_frame, lidar_frame, rclcpp::Clock())){
 
     //Find position of ego vehicle in world frame, so it can be fed through to the cluster objects
     // tf::StampedTransform ego_pose;
@@ -77,8 +77,8 @@ void Datmo::callback(const sensor_msgs::msg::LaserScan::ConstPtr& scan_in){
     //TODO implement varying calculation of dt
     dt = 0.08;
 
-    if (time > rclcpp::Time::now()){clusters.clear();}
-    time = rclcpp::Time::now();
+    if (time > rclcpp::Clock().now()){clusters.clear();}
+    time = rclcpp::Clock().now();
     auto start = chrono::steady_clock::now();
 
     vector<pointList> point_clusters_not_transformed;
@@ -171,7 +171,7 @@ void Datmo::callback(const sensor_msgs::msg::LaserScan::ConstPtr& scan_in){
     
     //Visualizations and msg publications
     visualization_msgs::msg::MarkerArray marker_array;
-    datmo::TrackArray track_array_box_kf; 
+    datmo_msg_interface::msg::TrackArray track_array_box_kf; 
     for (unsigned int i =0; i<clusters.size();i++){
 
       track_array_box_kf.tracks.push_back(clusters[i].msg_track_box_kf);
@@ -199,7 +199,7 @@ void Datmo::callback(const sensor_msgs::msg::LaserScan::ConstPtr& scan_in){
   }
   else{ //If the tf is not possible init all states at 0
     // might not need the delayed throttle portion (https://discourse.ros.org/t/porting-of-logging-directives/8763/4)
-    RCLCPP_WARN_DELAYED_THROTTLE(1 ,"No transform could be found between %s and %s", lidar_frame.c_str(), world_frame.c_str());
+    // RCLCPP_WARN_STREAM_THROTTLE(1 ,"No transform could be found between %s and %s", lidar_frame.c_str(), world_frame.c_str());
   };
 }
 void Datmo::visualiseGroupedPoints(const vector<pointList>& point_clusters){
@@ -208,7 +208,7 @@ void Datmo::visualiseGroupedPoints(const vector<pointList>& point_clusters){
   //Populate grouped points message
   visualization_msgs::msg::Marker gpoints;
   gpoints.header.frame_id = world_frame;
-  gpoints.header.stamp = rclcpp::Time::now();
+  gpoints.header.stamp = rclcpp::Clock().now();
   gpoints.ns = "clustered_points";
   gpoints.action = visualization_msgs::msg::Marker::ADD;
   gpoints.pose.orientation.w = 1.0;
@@ -226,7 +226,7 @@ void Datmo::visualiseGroupedPoints(const vector<pointList>& point_clusters){
     gpoints.color.a = 1.0;
     //gpoints.lifetime = ros::Duration(0.08);
     for(unsigned int j=0; j<point_clusters[i].size(); ++j){
-      geometry_msgs::Point p;
+      geometry_msgs::msg::Point p;
       p.x = point_clusters[i][j].first;
       p.y = point_clusters[i][j].second;
       p.z = 0;

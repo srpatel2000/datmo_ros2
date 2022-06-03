@@ -38,7 +38,7 @@ int main(int argc, char **argv)
   // //Initiate ROS
   // ros::init(argc, argv, "datmo_node");
   // //Create an object of class datmo 
-  // Datmo  datmo_object;
+  Datmo  datmo_object;
 
   /* Change: Instead of passing the node’s name to the library initialization call, 
   we do the initialization, then pass the node name to the creation of the node object 

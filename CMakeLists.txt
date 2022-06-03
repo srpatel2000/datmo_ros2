@@ -31,7 +31,8 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(eigen3_cmake_module REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(OpenMP REQUIRED)
-find_package(datmo_msg_interface REQUIRED) 
+find_package(datmo_msg_interface REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 #MultiThreading Library
 OPTION (USE_OpenMP "Use OpenMP" OFF)

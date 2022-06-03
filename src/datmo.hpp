@@ -72,12 +72,12 @@
 #include "datmo_msg_interface/msg/track_array.hpp"
 #include "datmo_msg_interface/msg/track.hpp"
 #include "cluster.hpp"
+#include <string>
 
-// CHANGE: replace typedef with change
-change std::pair<double, double> Point;
-change std::vector<double> l_shape;
-change std::vector<l_shape> l_shapes;
-change std::vector<Point> pointList;
+typedef std::pair<double, double> Point;
+typedef std::vector<double> l_shape;
+typedef std::vector<l_shape> l_shapes;
+typedef std::vector<Point> pointList;
 
 using namespace std;
 // This node segments the point cloud based on the break-point detector algorithm.
@@ -89,23 +89,23 @@ public:
   Datmo();
   ~Datmo();
 
-  void callback(const sensor_msgs::LaserScan::ConstPtr &);
-  void Clustering(const sensor_msgs::LaserScan::ConstPtr& , vector<pointList> &);
+  void callback(const sensor_msgs::msg::LaserScan::ConstPtr &);
+  void Clustering(const sensor_msgs::msg::LaserScan::ConstPtr& , vector<pointList> &);
   void visualiseGroupedPoints(const vector<pointList> &);
   void transformPointList(const pointList& , pointList& );
 
   // CHANGE: 
   // tf::TransformListener tf_listener;
-  tf_listener = std::make_shared<tf2_ros::TransformListener>;
+  tf_listener = std::make_shared<tf2_ros::TransformListener>(0);
 private:
 
   // CHANGE: change C++ library calls
   // ros::Publisher pub_marker_array; 
-  auto pub_marker_array = node->create_publisher<std_msgs::msg::String>;
+  string pub_marker_array = node->create_publisher<std_msgs::msg::String>;
   // ros::Publisher pub_tracks_box_kf;
-  auto pub_tracks_box_kf = node->create_publisher<std_msgs::msg::String>;
+  string pub_tracks_box_kf = node->create_publisher<std_msgs::msg::String>;
   // ros::Subscriber sub_scan;
-  auto sub_scan = node->create_subscription<std_msgs::msg::String>;
+  string sub_scan = node->create_subscription<std_msgs::msg::String>;
   // sensor_msgs::LaserScan scan;
   sensor_msgs::msg::LaserScan scan;
   
