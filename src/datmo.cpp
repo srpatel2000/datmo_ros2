@@ -31,12 +31,15 @@
 
 #include "datmo.hpp"
 
-Datmo::Datmo(){
+Datmo::Datmo() : Node("datmo_ros2") {
   // ros::NodeHandle n; 
   auto node = rclcpp::Node::make_shared("talker");
   // ros::NodeHandle n_private("~");
   auto node_private = std::make_shared<rclcpp::Node>("...", ...);
   
+  tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+  tf_listener = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+
   //ROS_INFO("Starting Detection And Tracking of Moving Objects");
   RCLCPP_INFO(node->get_logger(),"Starting Detection And Tracking of Moving Objects");
 
@@ -50,14 +53,14 @@ Datmo::Datmo(){
   node_private.param("euclidean_distance", euclidean_distance, 0.25);
   node_private.param("pub_markers", p_marker_pub, false);
 
-  pub_tracks_box_kf     = node.advertise<datmo_msg_interface::msg::TrackArray>("datmo/box_kf", 10);
-  pub_marker_array   = node.advertise<visualization_msgs::msg::MarkerArray>("datmo/marker_array", 10);
-  sub_scan = node.subscribe("/scan", 1, &Datmo::callback, this);
+  pub_tracks_box_kf     = node->create_publisher<datmo_msg_interface::msg::TrackArray>("datmo/box_kf", 10);
+  pub_marker_array   = node->create_publisher<visualization_msgs::msg::MarkerArray>("datmo/marker_array", 10);
+  
+  //// sub_scan = node.subscribe("/scan", 1, &Datmo::callback, this);
+  sub_scan = this->create_subscription<sensor_msgs::msg::LaserScan>("/scan", 1, std::bind(&Datmo::callback, this, _1));
 }
 
-Datmo::~Datmo(){
-}
-void Datmo::callback(const sensor_msgs::msg::LaserScan::ConstPtr& scan_in){
+void Datmo::callback(const sensor_msgs::msg::LaserScan::ConstSharedPtr& scan_in){
 
   // delete all Markers 
   visualization_msgs::msg::Marker marker;
@@ -238,7 +241,7 @@ void Datmo::visualiseGroupedPoints(const vector<pointList>& point_clusters){
   pub_marker_array.publish(marker_array);
 
 }
-void Datmo::Clustering(const sensor_msgs::msg::LaserScan::ConstPtr& scan_in, vector<pointList> &clusters){
+void Datmo::Clustering(const sensor_msgs::msg::LaserScan::ConstSharedPtr& scan_in, vector<pointList> &clusters){
   scan = *scan_in;
 
 
@@ -363,11 +366,18 @@ void Datmo::transformPointList(const pointList& in, pointList& out){
   // Point point; 
   geometry_msgs::msg::Point point;
   point_in.header.frame_id = lidar_frame;
-  point_in.header.stamp = rclcpp::Time(0);
+  point_in.header.stamp = this->now();
   for (unsigned int i = 0; i < in.size(); ++i) {
     point_in.point.x = in[i].first;
     point_in.point.y = in[i].second;
-    tf_listener.transformPoint(world_frame, point_in , point_out);
+    // tf_listener.transformPoint(world_frame, point_in , point_out);
+    if(tf_buffer_->canTransform(lidar_frame, world_frame, tf2::TimePointZero))
+    {
+      //Find position of ego vehicle in world frame, so it can be fed through to the cluster objects
+      geometry_msgs::msg::TransformStamped ego_pose;
+      ego_pose = tf_buffer_->lookupTransform(lidar_frame, world_frame, tf2::TimePointZero);
+      tf2::doTransform(point_out, point_out, ego_pose);
+    }
     point.first = point_out.point.x;
     point.second= point_out.point.y;
     out.push_back(point);

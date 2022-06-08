@@ -64,6 +64,7 @@
 // #include <tf/tf.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/transform_broadcaster.h>
+#include <tf2_ros/buffer.h>
 
 // Don't change --> code written by original team
 // #include "TrackArray.h"
@@ -71,6 +72,7 @@
 
 #include "datmo_msg_interface/msg/track_array.hpp"
 #include "datmo_msg_interface/msg/track.hpp"
+
 #include "cluster.hpp"
 #include <string>
 
@@ -80,34 +82,39 @@ typedef std::vector<l_shape> l_shapes;
 typedef std::vector<Point> pointList;
 
 using namespace std;
+using std::placeholders::_1;
+
 // This node segments the point cloud based on the break-point detector algorithm.
 // This algorithm is based on "L-Shape Model Switching-Based Precise Motion Tracking 
 // of Moving Vehicles Using Laser Scanners.
-class Datmo
+class Datmo : rclcpp::Node
 {
 public:
   Datmo();
   ~Datmo();
 
-  void callback(const sensor_msgs::msg::LaserScan::ConstPtr &);
-  void Clustering(const sensor_msgs::msg::LaserScan::ConstPtr& , vector<pointList> &);
+  void callback(const sensor_msgs::msg::LaserScan::ConstSharedPtr &);
+  void Clustering(const sensor_msgs::msg::LaserScan::ConstSharedPtr& , vector<pointList> &);
   void visualiseGroupedPoints(const vector<pointList> &);
   void transformPointList(const pointList& , pointList& );
 
   // CHANGE: 
   // tf::TransformListener tf_listener;
-  tf_listener = std::make_shared<tf2_ros::TransformListener>(0);
+  
 private:
 
   // CHANGE: change C++ library calls
   // ros::Publisher pub_marker_array; 
-  string pub_marker_array = node->create_publisher<std_msgs::msg::String>;
+  rclcpp::Publisher<datmo_msg_interface::msg::TrackArray>::SharedPtr pub_marker_array;  
   // ros::Publisher pub_tracks_box_kf;
-  string pub_tracks_box_kf = node->create_publisher<std_msgs::msg::String>;
+  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr pub_tracks_box_kf;
   // ros::Subscriber sub_scan;
-  string sub_scan = node->create_subscription<std_msgs::msg::String>;
+  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub_scan;
   // sensor_msgs::LaserScan scan;
   sensor_msgs::msg::LaserScan scan;
+
+  std::shared_ptr<tf2_ros::TransformListener> tf_listener{nullptr};
+  std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
   
   vector<Cluster> clusters;
 

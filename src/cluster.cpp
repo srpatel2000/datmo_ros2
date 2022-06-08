@@ -54,7 +54,7 @@ static inline double shortest_angular_distance(double from, double to){
   return normalize_angle(to-from);
 }
 
-Cluster::Cluster(unsigned long int id, const pointList& new_points, const double& dt, const std::string& world_frame, const tf2::Transform& ego_pose){
+Cluster::Cluster(unsigned long int id, const pointList& new_points, const double& dt, const std::string& world_frame, const tf2::Transform& ego_pose) {
 
   this->id = id;
   this->r = rand() / double(RAND_MAX);
@@ -106,8 +106,8 @@ void Cluster::populateTrackingMsgs(const double& dt){
 
   msg_track_box_kf.id = this->id;
 
-  //// msg_track_box_kf.odom.header.stamp = ros::Time::now();
-  msg_track_box_kf.odom.header.stamp = rclcpp::Time::now();
+  //// msg_track_box_kf.odom.header.stamp = ros::Clock().now();
+  msg_track_box_kf.odom.header.stamp = rclcpp::Clock().now();
   
   msg_track_box_kf.odom.header.frame_id = frame_name;
   msg_track_box_kf.odom.pose.pose.position.x = cx;
@@ -236,8 +236,8 @@ visualization_msgs::msg::Marker Cluster::getBoundingBoxVisualisationMessage() {
   ////visualization_msgs::Marker bb_msg;
   visualization_msgs::msg::Marker bb_msg;
 
-  //// bb_msg.header.stamp = ros::Time::now();
-  bb_msg.header.stamp = rclcpp::Time::now();
+  //// bb_msg.header.stamp = ros::Clock().now();
+  bb_msg.header.stamp = rclcpp::Clock().now();
 
   bb_msg.header.frame_id  = frame_name;
   bb_msg.ns = "bounding_boxes";
@@ -275,8 +275,8 @@ visualization_msgs::msg::Marker Cluster::getBoxModelKFVisualisationMessage() {
   //// visualization_msgs::Marker bb_msg;
   visualization_msgs::msg::Marker bb_msg;
 
-  //// bb_msg.header.stamp = ros::Time::now();
-  bb_msg.header.stamp = rclcpp::Time::now();
+  //// bb_msg.header.stamp = ros::Clock().now();
+  bb_msg.header.stamp = rclcpp::Clock().now();
 
   bb_msg.header.frame_id  = frame_name;
   bb_msg.ns = "box_models_kf";
@@ -334,8 +334,8 @@ visualization_msgs::msg::Marker Cluster::getLShapeVisualisationMessage() {
   //// visualization_msgs::Marker l1l2_msg;
   visualization_msgs::msg::Marker l1l2_msg;
 
-  //// l1l2_msg.header.stamp = ros::Time::now();
-  l1l2_msg.header.stamp = rclcpp::Time::now();
+  //// l1l2_msg.header.stamp = ros::Clock().now();
+  l1l2_msg.header.stamp = rclcpp::Clock().now();
 
   l1l2_msg.header.frame_id  = frame_name;
   l1l2_msg.ns = "L-Shapes";
@@ -442,8 +442,8 @@ visualization_msgs::msg::Marker Cluster::getThetaBoxVisualisationMessage() {
   //// arrow_marker.type            = visualization_msgs::Marker::ARROW;
   arrow_marker.type            = visualization_msgs::msg::Marker::ARROW;
 
-  //// arrow_marker.header.stamp    = ros::Time::now();
-  arrow_marker.header.stamp    = rclcpp::Time::now();
+  //// arrow_marker.header.stamp    = ros::Clock().now();
+  arrow_marker.header.stamp    = rclcpp::Clock().now();
 
   arrow_marker.ns              = "thetaBox";
 
@@ -482,8 +482,8 @@ visualization_msgs::msg::Marker Cluster::getThetaL1VisualisationMessage() {
   //// arrow_marker.type            = visualization_msgs::Marker::ARROW;
   arrow_marker.type            = visualization_msgs::msg::Marker::ARROW;
   
-  //// arrow_marker.header.stamp    = ros::Time::now();
-  arrow_marker.header.stamp    = rclcpp::Time::now();
+  //// arrow_marker.header.stamp    = ros::Clock().now();
+  arrow_marker.header.stamp    = rclcpp::Clock().now();
 
   arrow_marker.ns              = "thetaL1";
   
@@ -521,7 +521,7 @@ visualization_msgs::msg::Marker Cluster::getThetaL2VisualisationMessage() {
 
   //arrow_marker.header.frame_id = frame_name;
 
-  //// arrow_marker.header.stamp      = ros::Time::now();
+  //// arrow_marker.header.stamp      = ros::Clock().now();
   arrow_marker.header.stamp      = rclcpp::Clock().now();
 
   arrow_marker.ns                = "thetaL2";
@@ -558,7 +558,7 @@ visualization_msgs::msg::Marker Cluster::getArrowVisualisationMessage() {
   arrow_marker.type = visualization_msgs::msg::Marker::ARROW;
   //arrow_marker.header.frame_id = frame_name;
   arrow_marker.header.frame_id = frame_name;
-  //// arrow_marker.header.stamp = ros::Time::now();
+  //// arrow_marker.header.stamp = ros::Clock().now();
   arrow_marker.header.stamp = rclcpp::Clock().now();
 
   arrow_marker.ns = "velocities";
@@ -599,7 +599,7 @@ visualization_msgs::msg::Marker Cluster::getArrowVisualisationMessage() {
 
   corner_msg.header.frame_id = frame_name;
 
-  ////  corner_msg.header.stamp = ros::Time::now();
+  ////  corner_msg.header.stamp = ros::Clock().now();
   corner_msg.header.stamp = rclcpp::Clock().now();
 
   corner_msg.ns = "closest_corner";
@@ -639,7 +639,7 @@ visualization_msgs::msg::Marker Cluster::getArrowVisualisationMessage() {
 
     boxcenter_marker.header.frame_id = frame_name;
 
-    //// boxcenter_marker.header.stamp = ros::Time::now();
+    //// boxcenter_marker.header.stamp = ros::Clock().now();
     boxcenter_marker.header.stamp = rclcpp::Clock().now();
 
     boxcenter_marker.ns = "bounding_box_center";
@@ -670,7 +670,7 @@ visualization_msgs::msg::Marker Cluster::getClusterVisualisationMessage() {
   visualization_msgs::msg::Marker cluster_vmsg;
 
   cluster_vmsg.header.frame_id  = frame_name;
-  //// cluster_vmsg.header.stamp = ros::Time::now();
+  //// cluster_vmsg.header.stamp = ros::Clock().now();
   cluster_vmsg.header.stamp = rclcpp::Clock().now();
 
   cluster_vmsg.ns = "clusters";
@@ -712,7 +712,7 @@ visualization_msgs::msg::Marker Cluster::getBoxSolidVisualisationMessage() {
 
 
   marker.header.frame_id = frame_name;
-  //// marker.header.stamp = ros::Time::now();
+  //// marker.header.stamp = ros::Clock().now();
   marker.header.stamp = rclcpp::Clock().now();
 
   marker.ns = "boxes";
@@ -749,8 +749,8 @@ visualization_msgs::msg::Marker Cluster::getLineVisualisationMessage() {
   //// visualization_msgs::Marker line_msg;
   visualization_msgs::msg::Marker line_msg;
 
-  //// line_msg.header.stamp = ros::Time::now();
-  line_msg.header.stamp = rclcpp::Time::now();
+  //// line_msg.header.stamp = ros::Clock().now();
+  line_msg.header.stamp = rclcpp::Clock().now();
 
   line_msg.header.frame_id  = frame_name;
   line_msg.ns = "lines";

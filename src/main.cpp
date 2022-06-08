@@ -38,19 +38,19 @@ int main(int argc, char **argv)
   // //Initiate ROS
   // ros::init(argc, argv, "datmo_node");
   // //Create an object of class datmo 
-  Datmo  datmo_object;
+  // Datmo  datmo_object;
 
   /* Change: Instead of passing the node’s name to the library initialization call, 
   we do the initialization, then pass the node name to the creation of the node object 
  (we can use the auto keyword because now we’re requiring a C++14 compiler) */ 
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("datmo_node");
+  auto node = std::make_shared<Datmo>();
 
 
   // ros::spin();
 
   /* Change: used ros2 equivalent of spin() */
-  rclcpp::spin()
+  rclcpp::spin(node)
 
   return 0;
 }
