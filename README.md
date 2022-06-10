@@ -144,8 +144,6 @@ In case that the  **pub_markers** flag is set to true, this package publishes vi
 **bounding_box_center** - The center of the bounding box is visualized with a yellow rectangle.\
 **velocities** - The velocities of the tracked objects are represented with an arrow.\
 
-*End original explanation written by Kostas Konstantinidis*
-
 ### Parameters
 
 * "lidar_frame" ("string", default: "laser") - Name of the transformation frame (frame_id) of the LaserScan msgs
@@ -159,6 +157,7 @@ In case that the  **pub_markers** flag is set to true, this package publishes vi
 [1] D. Kim, K. Jo, M. Lee, and M. Sunwoo, “L-shape model switching-based precise motion tracking of moving vehicles using laser scanners,” IEEE Transactions on Intelligent Transportation Systems, vol. 19, no. 2, pp. 598–612, 2018.\
 [2] X. Zhang, W. Xu, C. Dong, and J. M. Dolan, “Efficient l-shape fitting for vehicle detection using laser scanners,” in 2017 IEEE Intelligent Vehicles Symposium (IV), pp. 54–59, IEEE, 2017.
 
+*End of original explanation written by Kostas Konstantinidis*
 
 ## Development timeline
 ========================================
