@@ -8,7 +8,7 @@ We are students at UCSD who were tasked with using 2D LiDAR perception to deal w
 
 This package is not currently finished and is a work in progress. This is because our goal was simply to output this algorithm using a ROS1 bridge as well as attempt to reduce the amount of errors in the pre-existing ROS2 translated code of DATMO. In the future if this code is going to be used, there is much debugging to be done, however most of the ROS1 code is translated to ROS2. 
 
-*Begin original explanation written by Kostas Konstantinidis*
+*Begin original explanation written by Kostas Konstantinidis:* 
 
 ## Detection and Tracking of Moving Objects with 2D LIDAR
 
