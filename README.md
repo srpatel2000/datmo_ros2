@@ -1,85 +1,15 @@
 # datmo_ros2
-Detection and Tracking of Moving Objects (DATMO) using sensor_msgs/Lidar.
+
+## Introduction
+
+DISCLAIMER: This package was originally built in ROS1 by Kostas Konstantinidis. For information on that please check out this repo: https://github.com/kostaskonkk/datmo. 
+
+We are students at UCSD who were tasked with using 2D LiDAR perception to deal with the assessment of a vehicle’s surroundings for our DSC 190: Introduction to Robotics Course. Our goal was to use the preexisting DATMO package and rebuild it in ROS2 in order to make the package more timeless and better organized. In this repo, you will find our code which uses the same logic as the original DATMO package as seen below. 
+
+This package is not currently finished and is a work in progress. This is because our goal was simply to output this algorithm using a ROS1 bridge as well as attempt to reduce the amount of errors in the pre-existing ROS2 translated code of DATMO. In the future if this code is going to be used, there is much debugging to be done, however most of the ROS1 code is translated to ROS2. 
 
 
-# Development timeline
-========================================
-# Week 7: Preparation
-
-- Cloning DATMO from Github into the Jetson
-- Installing all the relevant packages on our Jetson
-    - Updating package dependencies in a docker container
-- Researching a bridge between ROS1 and ROS2 using ROS1_bridge
-- Reasoning: the package is built on ROS1 (and our LIDAR is published in ROS2)
-- Trying to run DATMO on our robot by reviewing DATMO README and following the steps to successfully launch it
-========================================
-# Week 8 Part 1: Theory 
-
-- Understanding the logic of the DATMO Package:
-    - Reading through the research paper associated with the DATMO package  
-        - Understanding the theory and logic 
-        - Figuring out the input and output  
-        - Identifying issues that can happen in a real race 
-        - Watching the tutorial presentation of the package
-
-# Week 8 Part 2: Code Testing
-
-- Coding and Robot Testing:
-    - Producing Visualization of DATMO using RVIZ 
-        - Confirming the DATMO outputs are accurate through RVIZ 
-        - Visualizing real life outputs in the RVIZ 
-        - Writing documentation for setting up ROS1_bridge and DATMO with our robot (For Team 2 to use)
-    - Understanding general output structure of DATMO
-        - x, y, z point arguments 
-        - r, g, b, a color arguments
-
-# Week 8 Part 3: Communication
-
-- Communication with Team 2
-    - Connecting with Team 2 to let them know what is the output of the package
-        - Sending the DATMO research paper with annotations to better understand package
-    - Sending our DATMO documentation for how to run the package on a Jetson using a ROS1_bridge to Team 2
-
-========================================
-# Week 9: Start Translating DATMO to ROS2
-
-- Researching how to update the DATMO package
-    - Searching instructions on how to translate ROS1 DATMO package to a ROS2 version
-    - Creating a new ROS2 package using the ROS1 DATMO code 
-    - Translating and updating the files from the old package to the newly created package
-
-# Week 9: Code Translation
-
-- Researching library changes between ROS1 to ROS2 and their usage in ROS2 packages
-    - EX: Replacing the call of the libraries in hpp/cpp files with the updated ROS2 version
-- Replacing the old package dependencies of ROS1 with the latest ROS2 packages and also updating the associated code
-- Updating depreciated C++ libraries
-
-- Files that were translated:
-    - Source files:
-        - main.cpp
-        - cluster.cpp & cluster.hpp
-        - datmo.cpp & datmo.hpp
-        - l_shape_tracker.cpp & l_shape_tracker.hpp
-        - kalman.cpp & kalman.hpp
-    - CMakeLists.txt
-    - package.xml
-
-========================================
-# Week 10 and Finals Week: Debugging Issues
-
-- Debugging the updated ROS2 files !!! 
-    - We are inexperienced in C++ and understanding differences between ROS2 and ROS1
-    - Difficulty in interpreting errors
-        - ROS2 error? C++ error?
-        - Package dependency error?
-        - Compilation error?
-    - Needed extensive help in debugging
-        - Tanmay and Sid were extremely helpful but rightfully not always available 
-
-
-
-Detection and Tracking of Moving Objects with 2D LIDAR
+## Detection and Tracking of Moving Objects with 2D LIDAR
 ========================================
 This package aims to provide Detection and Tracking of Moving Objects capabilities to robotic platforms that are equipped with a 2D LIDAR sensor and publish 'sensor_msgs/LaseScan' ROS messages.
 Such a scenario would be the one visualized below, in which the black scaled car is equipped with a LIDAR sensor and it needs to track the motion of the red vehicle through the LIDAR measurements.\
@@ -93,16 +23,16 @@ The workflow of this package is inspired by the one presented in Kim et al., 201
 
 
 
-# Overview 
+## Overview 
 Below you can read a synopsis of its funcion and operation. 
 A more in depth explanation of this package's inner workings is given in this [paper](https://github.com/kostaskonkk/datmo/raw/master/paper.pdf).
 
-## Detection 
+### Detection 
 
 The detection part of the system is visualized in the following flowchart:
 ![Visualization of the detection stage](https://github.com/kostaskonkk/datmo/raw/master/images/flowchart_detection.png)
 
-### Clustering 
+#### Clustering 
 In the clustering step the raw LIDAR measurements are divided to groups/clusters. In this way, the different objects in the environment are differentiatted.
 A simple way to do this is by separating clusters, based on the inbetween euclidean distance of LIDAR measurements. 
 Therefore, if the distance of two consequtive LIDAR measurements is greater than a predefined threshold distance the two points are divided in two separate clusters.
@@ -122,23 +52,23 @@ L-shapes represent the corner of the rectangle closer to the sensor and its two 
 Therefore, every L-shape contains five measurements, the position of the corner point, the orientation of the rectangle (theta) and the length of its sides (L1, L2).
 
 
-## Tracking
+### Tracking
 
 The tracking part of the system is visualized in the following flowchart:
 ![Visualization of the tracking stage](https://github.com/kostaskonkk/datmo/raw/master/images/flowchart_tracking.png)
 
-### Data Association
+#### Data Association
 The clusters are tracked between time frames by a Nearest Neighbour data association scheme, with a Euclidean distance criterion.\
 ![Visualization of the association algorithm](https://github.com/kostaskonkk/datmo/raw/master/images/association.gif)
 <!--![Visualization of the association algorithm](https://github.com/kostaskonkk/datmo/raw/master/images/data_association.gif)-->
 
-### Apperance Change Detector
+#### Apperance Change Detector
 In cases that the closest corner point of a tracked vehicle changes between measurements, this is detected by comparing the Mahalanobis distance of the four corner points of the vehicle with that of the new L-shape.
 ![Visualization of the corner switching scheme](https://github.com/kostaskonkk/datmo/raw/master/images/corner.gif)
 <!--![Visualization of the association algorithm](https://github.com/kostaskonkk/datmo/raw/master/images/data_association.gif)-->
 
 
-### Kinematic and Shape Trackers
+#### Kinematic and Shape Trackers
 
 The motion of the detected vehicles is tracked based on two kinematic trackers.
 A Kalman Filter with a Constant Velocity Model and an Unscented Kalman Filter with a Coordinated-Turn model.
@@ -153,7 +83,7 @@ Below you can find a video of a presentation of mine, in which I explain some ea
 
 [![Midterm presentation](https://img.youtube.com/vi/HfFZcYwsY3I/0.jpg)](https://www.youtube.com/watch?v=HfFZcYwsY3I "Midterm presentation")
 
-# Installation and use
+## Installation and use
 This ROS package can be installed in the following way:
 1. First you should navigate to the source folder of your catkin_ws. For example `cd ~/catkin_ws/src`.
 2. Run 
@@ -179,11 +109,11 @@ You can run it by typing:
 ```
 roslaunch datmo datmo.launch
 ```
-# ROS API
-## Subscribed Topics
+## ROS API
+### Subscribed Topics
 scan(sensor_msgs/LaserScan) - This topic should be created be your LIDAR sensor.
 
-## Published Topics
+### Published Topics
 
 This node can publish a variety of topics but the final configuration depends on the user. By default the majority of the topics are disabled and they should be enabled through the launch file configuration.
 
@@ -192,7 +122,7 @@ This node can publish a variety of topics but the final configuration depends on
 
 Note: In case that the marker_array topic is published from a robot and visualized in computer, which has a different version of ROS installed (kinetic, melodic, ...), the msgs will not be published and the datmo node will crash with an md5sum error. To mitigate this, you should install on your robot the visualization msgs package of the ROS installation that runs on your computer.
 
-## Custom Messages
+### Custom Messages
 
 This package uses two custom msgs types `datmo/Track` and `datmo/TrackArray` to facilitate the publishing of its results. To my knowledge, at the time of developement, there was no standard ROS messages that accomplishes the same task. 
 
@@ -204,7 +134,7 @@ nav_msgs/Odometry odom - Estimated pose of the object
 
 The `datmo/TrackArray` message is an array that contains multiple datmo/Track messages, with the goal of efficient publishing.
 
-## Rviz markers
+### Rviz markers
 In case that the  **pub_markers** flag is set to true, this package publishes visualization messages, which can be displayed in Rviz. The following messages are published:
 
 **closest_corner** - The closest corner point of surrounding vehicles is visualized with a black rectangle.\
@@ -213,7 +143,7 @@ In case that the  **pub_markers** flag is set to true, this package publishes vi
 
 
 
-## Parameters
+### Parameters
 
 * "lidar_frame" ("string", default: "laser") - Name of the transformation frame (frame_id) of the LaserScan msgs
 * "world_frame" ("string", default: "world") - Name of the world coordinate frame, if it is not available, this value can be set equal to the lidar_frame
@@ -221,8 +151,85 @@ In case that the  **pub_markers** flag is set to true, this package publishes vi
 * "euclidean_distance" ("double", default: "0.25") - This value sets the distance that is used by the euclidean distasnce data association algorithm
 * "pub_markers" ("bool", default: "false") - publish of the the vizualization markers
 
-# References
+## References
 
 [1] D. Kim, K. Jo, M. Lee, and M. Sunwoo, “L-shape model switching-based precise motion tracking of moving vehicles using laser scanners,” IEEE Transactions on Intelligent Transportation Systems, vol. 19, no. 2, pp. 598–612, 2018.\
 [2] X. Zhang, W. Xu, C. Dong, and J. M. Dolan, “Efficient l-shape fitting for vehicle detection using laser scanners,” in 2017 IEEE Intelligent Vehicles Symposium (IV), pp. 54–59, IEEE, 2017.
+
+
+## Development timeline
+========================================
+### Week 7: Preparation
+
+- Cloning DATMO from Github into the Jetson
+- Installing all the relevant packages on our Jetson
+    - Updating package dependencies in a docker container
+- Researching a bridge between ROS1 and ROS2 using ROS1_bridge
+- Reasoning: the package is built on ROS1 (and our LIDAR is published in ROS2)
+- Trying to run DATMO on our robot by reviewing DATMO README and following the steps to successfully launch it
+- 
+========================================
+#### Week 8 Part 1: Theory 
+
+- Understanding the logic of the DATMO Package:
+    - Reading through the research paper associated with the DATMO package  
+        - Understanding the theory and logic 
+        - Figuring out the input and output  
+        - Identifying issues that can happen in a real race 
+        - Watching the tutorial presentation of the package
+
+### Week 8 Part 2: Code Testing
+
+- Coding and Robot Testing:
+    - Producing Visualization of DATMO using RVIZ 
+        - Confirming the DATMO outputs are accurate through RVIZ 
+        - Visualizing real life outputs in the RVIZ 
+        - Writing documentation for setting up ROS1_bridge and DATMO with our robot (For Team 2 to use)
+    - Understanding general output structure of DATMO
+        - x, y, z point arguments 
+        - r, g, b, a color arguments
+
+### Week 8 Part 3: Communication
+
+- Communication with Team 2
+    - Connecting with Team 2 to let them know what is the output of the package
+        - Sending the DATMO research paper with annotations to better understand package
+    - Sending our DATMO documentation for how to run the package on a Jetson using a ROS1_bridge to Team 2
+
+========================================
+### Week 9: Start Translating DATMO to ROS2
+
+- Researching how to update the DATMO package
+    - Searching instructions on how to translate ROS1 DATMO package to a ROS2 version
+    - Creating a new ROS2 package using the ROS1 DATMO code 
+    - Translating and updating the files from the old package to the newly created package
+
+### Week 9: Code Translation
+
+- Researching library changes between ROS1 to ROS2 and their usage in ROS2 packages
+    - EX: Replacing the call of the libraries in hpp/cpp files with the updated ROS2 version
+- Replacing the old package dependencies of ROS1 with the latest ROS2 packages and also updating the associated code
+- Updating depreciated C++ libraries
+
+- Files that were translated:
+    - Source files:
+        - main.cpp
+        - cluster.cpp & cluster.hpp
+        - datmo.cpp & datmo.hpp
+        - l_shape_tracker.cpp & l_shape_tracker.hpp
+        - kalman.cpp & kalman.hpp
+    - CMakeLists.txt
+    - package.xml
+
+========================================
+### Week 10 and Finals Week: Debugging Issues (aka Challenges Faced)
+
+- Debugging the updated ROS2 files !!! 
+    - We are inexperienced in C++ and understanding differences between ROS2 and ROS1
+    - Difficulty in interpreting errors
+        - ROS2 error? C++ error?
+        - Package dependency error?
+        - Compilation error?
+    - Needed extensive help in debugging
+        - Tanmay and Sid were extremely helpful but rightfully not always available 
 
