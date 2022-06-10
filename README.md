@@ -43,11 +43,39 @@ Detection and Tracking of Moving Objects (DATMO) using sensor_msgs/Lidar.
 ========================================
 # Week 9: Start Translating DATMO to ROS2
 
-Researching how to update the DATMO package
-Searching instructions on how to translate ROS1 DATMO package to a ROS2 version
-Creating a new ROS2 package using the ROS1 DATMO code 
-Translating and updating the files from the old package to the newly created package
+- Researching how to update the DATMO package
+    - Searching instructions on how to translate ROS1 DATMO package to a ROS2 version
+    - Creating a new ROS2 package using the ROS1 DATMO code 
+    - Translating and updating the files from the old package to the newly created package
 
+# Week 9: Code Translation
+
+- Researching library changes between ROS1 to ROS2 and their usage in ROS2 packages
+    - EX: Replacing the call of the libraries in hpp/cpp files with the updated ROS2 version
+- Replacing the old package dependencies of ROS1 with the latest ROS2 packages and also updating the associated code
+- Updating depreciated C++ libraries
+
+- Files that were translated:
+    - Source files:
+        - main.cpp
+        - cluster.cpp & cluster.hpp
+        - datmo.cpp & datmo.hpp
+        - l_shape_tracker.cpp & l_shape_tracker.hpp
+        - kalman.cpp & kalman.hpp
+    - CMakeLists.txt
+    - package.xml
+
+========================================
+# Week 10 and Finals Week: Debugging Issues
+
+- Debugging the updated ROS2 files !!! 
+    - We are inexperienced in C++ and understanding differences between ROS2 and ROS1
+    - Difficulty in interpreting errors
+        - ROS2 error? C++ error?
+        - Package dependency error?
+        - Compilation error?
+    - Needed extensive help in debugging
+        - Tanmay and Sid were extremely helpful but rightfully not always available 
 
 
 
