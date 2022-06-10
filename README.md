@@ -8,9 +8,12 @@ We are students at UCSD who were tasked with using 2D LiDAR perception to deal w
 
 This package is not currently finished and is a work in progress. This is because our goal was simply to output this algorithm using a ROS1 bridge as well as attempt to reduce the amount of errors in the pre-existing ROS2 translated code of DATMO. In the future if this code is going to be used, there is much debugging to be done, however most of the ROS1 code is translated to ROS2. 
 
+*Begin original explanation written by Kostas Konstantinidis*
 
 ## Detection and Tracking of Moving Objects with 2D LIDAR
+
 ========================================
+
 This package aims to provide Detection and Tracking of Moving Objects capabilities to robotic platforms that are equipped with a 2D LIDAR sensor and publish 'sensor_msgs/LaseScan' ROS messages.
 Such a scenario would be the one visualized below, in which the black scaled car is equipped with a LIDAR sensor and it needs to track the motion of the red vehicle through the LIDAR measurements.\
 ![Example experiment](https://github.com/kostaskonkk/datmo/raw/master/images/experiment.gif)
@@ -141,7 +144,7 @@ In case that the  **pub_markers** flag is set to true, this package publishes vi
 **bounding_box_center** - The center of the bounding box is visualized with a yellow rectangle.\
 **velocities** - The velocities of the tracked objects are represented with an arrow.\
 
-
+*End original explanation written by Kostas Konstantinidis*
 
 ### Parameters
 
